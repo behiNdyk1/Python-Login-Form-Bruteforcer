@@ -188,18 +188,18 @@ def bruteforce(form_parameters):
 				if "csrf" in payload.keys():
 					payload["csrf"] = c["csrf"]
 				total += 1
+				valid_creds = []
 				if error_msg not in login.text:
 					cprint(f"[+] Valid combination found!   [ {payload[user_param]}:{payload[pass_param]} ]", "green")
 					if stop_if_valid:
 						exit()
 					else:
-						continue
+						valid_creds.append([{payload[user_param]}, {payload[pass_param]}])
 				else:
+					cmd("clear")
 					if verbosity:
-						#cmd("clear")
-						print(f"[{total}] Trying: {payload[user_param]}:{payload[pass_param]} ({total * 100 // (len(passwords)*len(usernames))}%)")
+						print(f"{valid_creds if len(valid_creds) >= 1 else '[-] No valid credentials until now'}\n[{total}] Trying: {payload[user_param]}:{payload[pass_param]} ({total * 100 // (len(passwords)*len(usernames))}%)")
 					else:
-						cmd("clear")
 						cprint("[+] Working...", "green")
 
 def main():
@@ -220,5 +220,6 @@ def main():
 	except IndexError:
 		cprint("[+] Done!", "green")
 		exit()
+
 
 main()
